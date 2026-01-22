@@ -366,8 +366,6 @@
 /* Typing Indicator */
 .aila-chat-message.aila-chat-typing {
   border: none;
-  padding: 0.5rem 1rem;
-  max-width: fit-content;
   align-self: flex-start;
 }
 
@@ -375,7 +373,6 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.8rem 1.2rem;
 }
 
 .aila-chat-typing-dot {
@@ -605,7 +602,7 @@
   .aila-chat-header {
     border-radius: var(--aila-radius) var(--aila-radius) 0 0;
     padding: 1rem 1.2rem;
-    min-height: 60px;
+    min-height: 30px;
   }
 
   .aila-chat-messages {

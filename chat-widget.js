@@ -146,11 +146,15 @@ export default class AILAChatWidget {
         });
         
         // Close on outside click
-        this.container.addEventListener('click', (e) => {
-            if (e.target === this.container) {
+        this.handleOutsideClick = (e) => {
+            if (this.isOpen && 
+                !this.container.contains(e.target) && 
+                !this.launcher.contains(e.target)) {
                 this.close();
             }
-        });
+        };
+        
+        document.addEventListener('click', this.handleOutsideClick, true);
     }
     
     mount() {
@@ -345,6 +349,11 @@ export default class AILAChatWidget {
     }
     
     destroy() {
+        // Remove event listeners
+        if (this.handleOutsideClick) {
+            document.removeEventListener('click', this.handleOutsideClick, true);
+        }
+        
         this.launcher.remove();
         this.container.remove();
     }
