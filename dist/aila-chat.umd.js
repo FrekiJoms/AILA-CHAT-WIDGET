@@ -9,7 +9,7 @@
     (global = global || self, global.AILAChat = factory());
 }(this, (function () { 'use strict';
 
-    // Import the widget class (this will be replaced by actual content)
+    // Import the widget class
     class AILAChatWidget {
         constructor(options = {}) {
             this.webhookUrl = options.webhookUrl || '';

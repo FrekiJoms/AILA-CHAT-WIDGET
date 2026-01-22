@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ CDN Test - Fixed Version</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .status-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .loading { color: #fbbf24; }
+        .test-result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="status-box">
+            <h1>🌐 AILA Chat Widget CDN Test</h1>
+            <p id="statusText">🔄 Testing CDN URLs...</p>
+            
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <!-- Test your actual CDN URLs -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FrekiJoms/AILA-CHAT-WIDGET@v1.0.0/dist/chat-widget.css">
+    <script src="https://cdn.jsdelivr.net/gh/FrekiJoms/AILA-CHAT-WIDGET@v1.0.0/dist/aila-chat.umd.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusText = document.getElementById('statusText');
+            const results = document.getElementById('results');
+            
+            // Test CSS loading
+            setTimeout(() => {
+                const testElement = document.createElement('div');
+                testElement.className = 'aila-chat-launcher';
+                const styles = window.getComputedStyle(testElement);
+                
+                if (styles.position === 'fixed' || styles.display === 'flex') {
+                    results.innerHTML += '<div class="test-result success">✅ CSS loaded successfully from CDN!</div>';
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ CSS failed to load from CDN</div>';
+                }
+            }, 1000);
+            
+            // Test JavaScript loading
+            setTimeout(() => {
+                if (typeof AILAChat !== 'undefined' && AILAChat.createChat) {
+                    results.innerHTML += '<div class="test-result success">✅ JavaScript loaded successfully from CDN!</div>';
+                    
+                    try {
+                        const widget = AILAChat.createChat({
+                            webhookUrl: 'https://tambayanph.app.n8n.cloud/webhook/ictworkflow',
+                            welcomeMessage: 'Hello! I\\'m AILA loaded from CDN! 🚀'
+                        });
+                        
+                        if (widget) {
+                            results.innerHTML += '<div class="test-result success">✅ Widget created successfully! Look in bottom-right corner →</div>';
+                        } else {
+                            results.innerHTML += '<div class="test-result error">❌ Widget creation failed</div>';
+                        }
+                    } catch (error) {
+                        results.innerHTML += '<div class="test-result error">❌ Widget initialization failed: ' + error.message + '</div>';
+                    }
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ JavaScript failed to load from CDN</div>';
+                }
+                statusText.innerHTML = '✅ CDN testing complete!';
+                statusText.className = 'success';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
