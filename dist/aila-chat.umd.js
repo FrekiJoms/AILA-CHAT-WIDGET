@@ -9,7 +9,7 @@
     (global = global || self, global.AILAChat = factory());
 }(this, (function () { 'use strict';
 
-    // Import the widget class
+    // Complete AILA Chat Widget implementation
     class AILAChatWidget {
         constructor(options = {}) {
             this.webhookUrl = options.webhookUrl || '';
@@ -27,13 +27,7 @@
         }
 
         getSessionId() {
-           let sessionId;
-try {
-  sessionId = sessionStorage.getItem('aila_session_id');
-} catch (e) {
-  sessionId = null;
-}
-
+            let sessionId = sessionStorage.getItem('aila_session_id');
             if (!sessionId) {
                 sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 sessionStorage.setItem('aila_session_id', sessionId);
@@ -54,10 +48,10 @@ try {
             this.launcher.setAttribute('aria-label', 'Open chat');
             this.launcher.setAttribute('role', 'button');
             this.launcher.setAttribute('tabindex', '0');
-            this.launcher.innerHTML = `
-                <img src="./icon.png" alt="AILA" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
-                <div class="aila-floating-text">Chat with AILA</div>
-            `;
+            this.launcher.innerHTML = 
+                '<img src="./icon.png" alt="AILA" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">' +
+                '<div class="aila-floating-text">Chat with AILA</div>'
+            ;
             
             // Get reference to floating text
             this.floatingText = this.launcher.querySelector('.aila-floating-text');
@@ -67,33 +61,32 @@ try {
             this.container.className = 'aila-chat-container';
             this.container.setAttribute('aria-hidden', 'true');
             
-            this.container.innerHTML = `
-                <div class="aila-chat-header">
-                    <h3>AILA CHATBOT</h3>
-                    <p style="position: absolute; top: 2.115rem; font-size: 0.75rem; color: var(--aila-text-muted);">Version 1.9.5</p>
-                    <button class="aila-chat-close" aria-label="Close chat">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="aila-chat-messages" role="log" aria-live="polite"></div>
-                <div class="aila-chat-input-container">
-                    <div style="position: relative; flex: 1; display: flex; align-items: center;">
-                        <textarea 
-                            class="aila-chat-input" 
-                            placeholder="Type your message..." 
-                            rows="1"
-                            aria-label="Type your message"
-                        ></textarea>
-                        <button class="aila-chat-send aila-send-active" aria-label="Send message">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            `;
+            this.container.innerHTML = 
+                '<div class="aila-chat-header">' +
+                    '<h3>AILA CHATBOT</h3>' +
+                    '<button class="aila-chat-close" aria-label="Close chat">' +
+                        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                            '<path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+                        '</svg>' +
+                    '</button>' +
+                '</div>' +
+                '<div class="aila-chat-messages" role="log" aria-live="polite"></div>' +
+                '<div class="aila-chat-input-container">' +
+                    '<div style="position: relative; flex: 1; display: flex; align-items: center;">' +
+                        '<textarea ' +
+                            'class="aila-chat-input" ' +
+                            'placeholder="Type your message..." ' +
+                            'rows="1" ' +
+                            'aria-label="Type your message"' +
+                        '></textarea>' +
+                        '<button class="aila-chat-send aila-send-active" aria-label="Send message">' +
+                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                '<path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+                            '</svg>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>'
+            ;
             
             // Get references to inner elements
             this.messagesContainer = this.container.querySelector('.aila-chat-messages');
@@ -159,8 +152,10 @@ try {
         }
 
         mount() {
-            document.body.appendChild(this.container);
-            document.body.appendChild(this.launcher);
+            if (document.body) {
+                document.body.appendChild(this.container);
+                document.body.appendChild(this.launcher);
+            }
         }
 
         open() {
@@ -169,7 +164,7 @@ try {
             this.container.setAttribute('aria-hidden', 'false');
             this.container.classList.add('aila-chat-open');
             
-            // Add welcome message if this is the first time opening
+            // Add welcome message if this is first time opening
             if (this.messages.length === 0) {
                 this.addMessage(this.welcomeMessage, 'bot');
             }
@@ -228,7 +223,7 @@ try {
 
         addMessage(content, type = 'user') {
             const message = document.createElement('div');
-            message.className = `aila-chat-message aila-chat-message-${type}`;
+            message.className = 'aila-chat-message aila-chat-message-' + type;
             
             if (type === 'bot') {
                 message.innerHTML = this.renderSafeMarkdown(content);
@@ -251,13 +246,13 @@ try {
             this.isTyping = true;
             const typingMessage = document.createElement('div');
             typingMessage.className = 'aila-chat-message aila-chat-message-bot aila-chat-typing';
-            typingMessage.innerHTML = `
-                <div class="aila-chat-typing">
-                    <span class="aila-chat-typing-dot"></span>
-                    <span class="aila-chat-typing-dot"></span>
-                    <span class="aila-chat-typing-dot"></span>
-                </div>
-            `;
+            typingMessage.innerHTML = 
+                '<div class="aila-chat-typing">' +
+                    '<span class="aila-chat-typing-dot"></span>' +
+                    '<span class="aila-chat-typing-dot"></span>' +
+                    '<span class="aila-chat-typing-dot"></span>' +
+                '</div>'
+            ;
             
             this.messagesContainer.appendChild(typingMessage);
             this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
@@ -301,7 +296,7 @@ try {
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error('HTTP error! status: ' + response.status);
                 }
                 
                 // Handle streaming response if available
@@ -344,8 +339,12 @@ try {
                 document.removeEventListener('click', this.handleOutsideClick, true);
             }
             
-            this.launcher.remove();
-            this.container.remove();
+            if (this.launcher && this.launcher.parentNode) {
+                this.launcher.parentNode.removeChild(this.launcher);
+            }
+            if (this.container && this.container.parentNode) {
+                this.container.parentNode.removeChild(this.container);
+            }
         }
     }
 
@@ -360,7 +359,7 @@ try {
             webhookUrl: options.webhookUrl,
             welcomeMessage: options.welcomeMessage || 'Hello! How can I help you today?',
             position: options.position || 'bottom-right',
-            autoShow: options.autoShow === false
+            autoShow: options.autoShow === true
         };
 
         const widget = new AILAChatWidget(config);
