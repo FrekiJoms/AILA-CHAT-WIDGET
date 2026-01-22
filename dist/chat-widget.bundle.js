@@ -24,7 +24,7 @@ export default class AILAChatWidget {
         let sessionId = sessionStorage.getItem('aila_session_id');
         if (!sessionId) {
             // Generate UUID-like session ID
-            sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionId = 'widget-guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             sessionStorage.setItem('aila_session_id', sessionId);
         }
         return sessionId;
@@ -53,7 +53,7 @@ export default class AILAChatWidget {
         this.container.innerHTML = `
             <div class="aila-chat-header">
                 <h3>AILA CHATBOT</h3>
-                <p style="position: absolute; top: 2.115rem; font-size: 0.75rem; color: var(--aila-text-muted);">Version 1.0.0</p>
+                <p style="position: absolute; top: 2.115rem; font-size: 0.75rem; color: var(--aila-text-muted);">Version 1.9.5</p>
                 <button class="aila-chat-close" aria-label="Close chat">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

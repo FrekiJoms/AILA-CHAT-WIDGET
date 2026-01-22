@@ -1,27 +1,33 @@
 # 🤖 AILA Chat Widget
 
-Enhanced, production-ready chat widget with n8n-compatible API and beautiful AILA gradient design.
+Production-ready, feature-rich chat widget with beautiful AILA gradient design and seamless integration.
 
 ## ✨ Features
 
-- 🎨 **Beautiful AILA Gradient Design** - Animated gradient backgrounds and glass morphism
-- 💬 **Rich Message Support** - Markdown (bold, italic, code) and HTML tags
-- ⚡ **Typing Indicators** - Smooth animated typing indicators
-- 📱 **Mobile Responsive** - Perfect on all devices
-- 🔄 **n8n Compatible API** - Drop-in replacement for @n8n/chat
-- 🎯 **Session Tracking** - Automatic session ID generation
-- ♿ **Accessibility** - ARIA labels, keyboard navigation
-- 🔒 **CSP Safe** - Content Security Policy compliant
-- 🌙 **High Contrast** - Supports reduced motion and high contrast modes
+- 🎨 **Beautiful AILA Gradient Design** - Animated gradient backgrounds with glass morphism
+- 💬 **Rich Message Support** - Full Markdown (bold, italic, code) and safe HTML rendering
+- ⚡ **Typing Indicators** - Smooth animated typing indicators with pulsing dots
+- 📱 **Mobile Optimized** - Responsive floating widget with touch-friendly interface
+- 🔄 **n8n Compatible API** - Drop-in replacement for existing n8n workflows
+- 🎯 **Session Tracking** - Automatic persistent session ID generation
+- 💭 **Floating Text** - Animated "Chat with AILA" prompt above launcher
+- 👆 **Click-Outside Close** - Intuitive click-outside-to-close functionality
+- ♿ **Full Accessibility** - ARIA labels, keyboard navigation, screen reader support
+- 🔒 **CSP Safe** - Content Security Policy compliant rendering
+- 🌙 **High Contrast Support** - Respects prefers-reduced-motion and high contrast
+- 📱 **Safe Area Support** - Optimized for notched phones and modern devices
 
 ## 🚀 Quick Start
 
 ### Basic Integration (n8n Compatible)
 
 ```html
-<link href="chat-widget.css" rel="stylesheet" />
+<!-- AILA Chat Widget Styles -->
+<link href="./dist/chat-widget.css" rel="stylesheet" />
+
+<!-- AILA Chat Widget Initialization -->
 <script type="module">
-    import { createChat } from './aila-chat.js';
+    import { createChat } from "./dist/aila-chat.bundle.js";
 
     createChat({
         webhookUrl: 'YOUR_WEBHOOK_URL'
@@ -32,9 +38,12 @@ Enhanced, production-ready chat widget with n8n-compatible API and beautiful AIL
 ### Advanced Configuration
 
 ```html
-<link href="chat-widget.css" rel="stylesheet" />
+<!-- AILA Chat Widget Styles -->
+<link href="./dist/chat-widget.css" rel="stylesheet" />
+
+<!-- AILA Chat Widget Initialization -->
 <script type="module">
-    import { createChat } from './aila-chat.js';
+    import { createChat } from "./dist/aila-chat.bundle.js";
 
     createChat({
         webhookUrl: 'YOUR_WEBHOOK_URL',
@@ -45,16 +54,33 @@ Enhanced, production-ready chat widget with n8n-compatible API and beautiful AIL
 </script>
 ```
 
-## 📁 Files
+## 📁 File Structure
 
-### Required Files
-- `chat-widget.css` - All styles (consolidated from style.css)
-- `aila-chat.js` - Simple API wrapper
-- `chat-widget.js` - Core widget class
+### Distribution Files (Ready for Deployment)
+```
+dist/
+├── chat-widget.css           # Complete widget styles (consolidated)
+├── chat-widget.bundle.js     # Core AILAChatWidget class
+├── aila-chat.bundle.js      # Simple API wrapper
+└── types.d.ts              # TypeScript definitions
+```
 
-### Optional Files
-- `demo.html` - Complete working demo
-- `test-server.js` - Local development server
+### Project Files
+```
+├── chat-widget.js           # Source widget class
+├── icon.png                # AILA launcher icon
+├── demo.html               # Complete working demo
+├── test-floating.html       # Floating text test
+├── FEATURES_ADDED.md       # Feature documentation
+├── ALL_FIXES_COMPLETE.md   # Development log
+└── package.json           # NPM package configuration
+```
+
+### Required Files for Integration
+- `dist/chat-widget.css` - All widget styles
+- `dist/aila-chat.bundle.js` - Simple API (recommended)
+- `dist/chat-widget.bundle.js` - Core widget class (advanced)
+- `icon.png` - Launcher icon (optional)
 
 ## 🎯 Configuration Options
 
@@ -63,11 +89,18 @@ Enhanced, production-ready chat widget with n8n-compatible API and beautiful AIL
 | `webhookUrl` | string | **(Required)** | Your n8n webhook URL |
 | `welcomeMessage` | string | 'Hello! How can I help you today?' | Initial greeting message |
 | `position` | string | 'bottom-right' | Widget position ('bottom-right', 'bottom-left') |
-| `autoShow` | boolean | true | Auto-open chat on page load |
+| `autoShow` | boolean | false | Auto-open chat on page load (recommended: false) |
+
+### New Features
+- **Floating Text**: "Chat with AILA" animation above launcher bubble
+- **Click-Outside Close**: Click anywhere outside chat to close it
+- **Mobile Optimized**: Floating widget design (not fullscreen) on mobile
+- **Enhanced Accessibility**: Full keyboard navigation and ARIA support
+- **Safe Area Support**: Handles notched phones and rounded corners
 
 ## 💬 Message Format
 
-Your webhook should return JSON with a `reply` field:
+Your webhook should return JSON with a `reply`, `response`, or `message` field:
 
 ```json
 {
@@ -84,7 +117,7 @@ Your webhook should return JSON with a `reply` field:
 - `__bold text__` → **bold text**
 - `` `inline code` `` → `inline code`
 
-**HTML:**
+**Safe HTML Tags:**
 - `<br>` for line breaks
 - `<strong>` and `<b>` for bold
 - `<em>` and `<i>` for italic
@@ -92,33 +125,44 @@ Your webhook should return JSON with a `reply` field:
 - `<p>`, `<div>`, `<span>` for structure
 - `<ul>`, `<ol>`, `<li>` for lists
 
+### Streaming Support
+Widget supports both JSON responses and streaming text/plain responses for real-time typing effects.
+
 ## 🔧 Development
 
 ### Local Testing
 
 ```bash
-# Start development server
-node test-server.js
+# Using Python (if available)
+python -m http.server 8000
 
 # Open browser
-http://localhost:8002/
+http://localhost:8000/demo.html
 ```
 
-### Widget API
+### Widget API (Advanced Usage)
 
 ```javascript
-import { AILAChatWidget } from './chat-widget.js';
+import { AILAChatWidget, createChat } from './dist/chat-widget.bundle.js';
 
-const widget = new AILAChatWidget({
+// Method 1: Simple API (Recommended)
+const widget = createChat({
     webhookUrl: 'https://your-webhook-url.com/webhook',
     welcomeMessage: 'Custom welcome message',
     position: 'bottom-right'
 });
 
-widget.mount();       // Add to DOM
-widget.open();        // Open chat
-widget.close();       // Close chat
-widget.destroy();     // Remove from DOM
+// Method 2: Direct Class
+const chatWidget = new AILAChatWidget({
+    webhookUrl: 'https://your-webhook-url.com/webhook',
+    welcomeMessage: 'Custom welcome message',
+    position: 'bottom-right'
+});
+
+chatWidget.mount();       // Add to DOM
+chatWidget.open();        // Open chat
+chatWidget.close();       // Close chat
+chatWidget.destroy();     // Remove from DOM
 ```
 
 ### Session Tracking
@@ -139,26 +183,55 @@ The session ID is sent with every message:
 }
 ```
 
-## 🌐 CDN Deployment
+## 🚀 Deployment Guide
 
-### Using CDN (Coming Soon)
+### GitHub Pages (Recommended)
 
-```html
-<link href="https://cdn.jsdelivr.net/npm/aila-chat/dist/style.css" rel="stylesheet" />
-<script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/aila-chat/dist/chat.bundle.es.js';
+1. **Push to GitHub Repository**
+   ```bash
+   git add .
+   git commit -m "Deploy AILA Chat Widget"
+   git push origin main
+   ```
 
-    createChat({
-        webhookUrl: 'YOUR_WEBHOOK_URL'
-    });
-</script>
-```
+2. **Enable GitHub Pages**
+   - Go to repository Settings → Pages
+   - Source: Deploy from a branch → main
+   - Folder: / (root)
+   - Save
+
+3. **Access Your Widget**
+   ```
+   https://yourusername.github.io/aila-chat-widget/
+   ```
 
 ### Self-Hosting
 
-1. Upload the three required files to your server
-2. Update the import paths in your HTML
-3. Ensure your server serves files with correct MIME types
+1. **Upload Required Files**
+   ```
+   your-server.com/aila-chat/
+   ├── dist/chat-widget.css
+   ├── dist/aila-chat.bundle.js
+   ├── dist/chat-widget.bundle.js
+   └── icon.png
+   ```
+
+2. **Integration Code**
+   ```html
+   <link href="/aila-chat/dist/chat-widget.css" rel="stylesheet" />
+   <script type="module">
+       import { createChat } from "/aila-chat/dist/aila-chat.bundle.js";
+       createChat({
+           webhookUrl: 'YOUR_WEBHOOK_URL'
+       });
+   </script>
+   ```
+
+### NPM Package (Coming Soon)
+
+```bash
+npm install aila-chat-widget
+```
 
 ## 🎨 Customization
 
@@ -225,6 +298,37 @@ MIT License - Feel free to use in commercial projects!
 3. Make your changes
 4. Submit a pull request
 
+## ✅ Pre-Deployment Checklist
+
+### Before Deploying
+- [ ] Test all features in `demo.html`
+- [ ] Verify webhook URL is working
+- [ ] Test on mobile devices
+- [ ] Check browser compatibility
+- [ ] Validate CSS variables work
+- [ ] Test accessibility features
+
+### Final Files to Deploy
+```
+aila-chat-widget/
+├── dist/
+│   ├── chat-widget.css
+│   ├── aila-chat.bundle.js
+│   ├── chat-widget.bundle.js
+│   └── types.d.ts
+├── icon.png
+├── demo.html
+└── README.md
+```
+
+### GitHub Release Steps
+1. Tag your release: `git tag v1.0.0`
+2. Push tags: `git push origin v1.0.0`
+3. Create GitHub Release with release notes
+4. Update repository description
+
 ---
 
-**Made with ❤️ by the AILA Team**
+**🚀 Production Ready - Version 1.9.5**
+
+Made with ❤️ by freki
