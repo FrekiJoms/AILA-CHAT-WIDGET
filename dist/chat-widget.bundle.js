@@ -164,9 +164,6 @@ export default class AILAChatWidget {
         this.container.setAttribute('aria-hidden', 'false');
         this.container.classList.add('aila-chat-open');
         
-        // Floating text behavior - hide when chat is open
-        this.hideFloatingText();
-        
         // Add welcome message if this is the first time opening
         if (this.messages.length === 0) {
             this.addMessage(this.welcomeMessage, 'bot');

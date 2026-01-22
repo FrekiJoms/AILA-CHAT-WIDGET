@@ -103,7 +103,7 @@
 .aila-floating-text {
   position: absolute;
   bottom: calc(100% + 0.5rem);
-  right: 0%;
+  right: 0;
   transform: translateX(-50%);
   background: var(--aila-bg-tertiary);
   color: var(--aila-text-primary);
