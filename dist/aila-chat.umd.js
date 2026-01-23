@@ -13,7 +13,7 @@
     class AILAChatWidget {
         constructor(options = {}) {
             this.webhookUrl = options.webhookUrl || '';
-            this.welcomeMessage = options.welcomeMessage || 'Hello! How can I help you today?';
+            this.welcomeMessage = options.welcomeMessage || 'Hello! ako si AILA, How can I help you today?';
             this.position = options.position || 'bottom-right';
             this.isOpen = false;
             this.messages = [];
